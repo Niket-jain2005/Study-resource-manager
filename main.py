@@ -99,6 +99,33 @@ def filter_by_price(min_price,max_price):
         for i,b in enumerate(result,1):
             print(f"{i}. {b['title'].title()} - ₹{b['price']}")       
     
+def delete_book():
+    books=load_books()
+
+    if not books:
+        print("No books to delete")
+        return
+    
+    print("\n====Choose Book Number TO Delete====\n")
+
+    view_books()
+
+    while True:
+        try:
+            choice=int(input("Enter book number to delete : "))
+            if choice > 0 and choice<=len(books):
+                break
+            else:
+                print(f"Invalid input. Your choice must be between 1 and {len(books)}.Please try again.")
+        except:
+            print("Enter Valid Choice")
+    
+    books.pop(choice-1)
+    save_books(books)
+
+    print("Book deleted successfully")
+
+
 
 while True:            
     print("====MENU====\n")
@@ -106,7 +133,8 @@ while True:
     print("2 = View")
     print("3 = Search")
     print("4 = Filter by Price")
-    print("5 = Exit")
+    print("5 = Delete Book")
+    print("6 = Exit")
     try:
         choice=int(input(f"Enter Your Choice : "))
     except:
@@ -133,6 +161,8 @@ while True:
                 print("Invalid input, enter numbers only")
         filter_by_price(min_price,max_price)
     elif choice==5:
+        delete_book()
+    elif choice==6:
         print("\n====BYE====\n")
         break
     else:
