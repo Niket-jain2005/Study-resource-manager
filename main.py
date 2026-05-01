@@ -192,9 +192,43 @@ def sort_books():
         print(f"   Subject: {book['subject'].title()}")
         print(f"   Description: {book['description'].capitalize()}\n")
 
+def show_stats():
+    books=load_books()
+
+    if not books:
+        print("No books available")
+        return
+    
+    total_books=len(books)
+    total_price=0
+
+    max_price_book=""
+    max_price=0
+
+    min_price_book=""
+    min_price=float("inf")
+
+    for book in books:
+        total_price += book["price"]
+        if book["price"]>max_price:
+            max_price=book["price"]
+            max_price_book=book["title"]
+        if book["price"]<min_price:
+            min_price=book["price"]
+            min_price_book=book["title"]
+
+    average_price=total_price / total_books
+
+    print("\n==== STATS ====\n")
+
+    print(f"Total Books: {total_books}")
+    print(f"Average Price: ₹{average_price}")
+    print(f"\nHighest Price Book:\n{max_price_book} - ₹{max_price}")  
+    print(f"\nLowest Price Book:\n{min_price_book} - ₹{min_price}")
+    
 
 while True:            
-    print("====MENU====\n")
+    print("\n====MENU====\n")
     print("1 = Add Book")
     print("2 = View")
     print("3 = Search")
@@ -202,7 +236,8 @@ while True:
     print("5 = Delete Book")
     print("6 = Update Book")
     print("7 = Sort by Price")
-    print("8 = Exit")
+    print("8 = Show Stats")
+    print("9 = Exit")
     try:
         choice=int(input(f"Enter Your Choice : "))
     except:
@@ -235,6 +270,8 @@ while True:
     elif choice==7:
         sort_books()
     elif choice==8:
+        show_stats()
+    elif choice==9:
         print("\n====BYE====\n")
         break
     else:
