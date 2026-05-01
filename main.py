@@ -125,6 +125,60 @@ def delete_book():
 
     print("Book deleted successfully")
 
+def update_book():
+    books=load_books()
+
+    if not books:
+        print("No book to update")
+        return
+    
+    view_books()
+
+    while True:
+        try:
+            index=int(input("Enter book number to update : "))
+            
+            if index <= 0 or index > len(books): 
+                print(f"Enter number between 1 and {len(books)}")
+                print("Try again")
+                continue
+            break
+        except:
+            print("Enter a valid number")
+            print("Try again")
+
+    book=books[index-1]
+
+    for key in book:
+        print(f"old {key.title()} - {book[key]}")
+       
+        new_value=input(f"Enter new {key.title()} (leave blank to keep old) : ").strip()
+
+        if not new_value:
+            continue
+
+        if key=="price":
+            try:
+                new_value=int(new_value)
+                if new_value<0:
+                    print("Invalid price, must be a positive number")
+                    continue
+            except:
+                print("Invalid price, must be a positive number")
+                continue
+
+
+        book[key] = new_value.lower() if key != "price" else new_value
+        print(f"{key.title()} changed successfully")
+    
+    save_books(books)
+    print("Book updated successfully")
+    input("Press Enter to continue...")
+
+
+        
+    
+
 
 
 while True:            
@@ -134,7 +188,8 @@ while True:
     print("3 = Search")
     print("4 = Filter by Price")
     print("5 = Delete Book")
-    print("6 = Exit")
+    print("6 = Update Book")
+    print("7 = Exit")
     try:
         choice=int(input(f"Enter Your Choice : "))
     except:
@@ -163,6 +218,8 @@ while True:
     elif choice==5:
         delete_book()
     elif choice==6:
+        update_book()
+    elif choice==7:
         print("\n====BYE====\n")
         break
     else:
