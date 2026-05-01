@@ -40,7 +40,9 @@ project-folder/
 ├── utils/
 │   └── helper.py
 ├── data/
-│   └── books.json
+│   └── books.json (ignored)
+├── .gitignore
+└── README.md
 ```
 
 ---
