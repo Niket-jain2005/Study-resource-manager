@@ -161,10 +161,36 @@ def update_book():
     print("Book updated successfully")
     input("Press Enter to continue...")
 
+def sort_books():
+    books=load_books()
 
-        
+    if not books:
+        print("No book to sort")
+        return
+    print("1. Low to High")
+    print("2. High to Low")
+    while True:
+        try:
+            sort_choice=int(input("Enter choice 1 or 2 : "))
+            if sort_choice not in [1, 2]:
+                print("Enter choice 1 or 2")
+                print("Try again")
+                continue
+            break            
+        except:
+            print("Invalid choice")
+            print("Try again")
     
-
+    if sort_choice==1:
+        sorted_books=sorted(books,key= lambda x:x["price"])
+    else:
+        sorted_books=sorted(books,key= lambda x:x["price"], reverse=True)
+    
+    print("\n====SORTED BOOK LIST ====\n")
+    for i , book in enumerate(sorted_books,1):
+        print(f"{i}. {book['title'].title()} - ₹{book['price']}")
+        print(f"   Subject: {book['subject'].title()}")
+        print(f"   Description: {book['description'].capitalize()}\n")
 
 
 while True:            
@@ -175,7 +201,8 @@ while True:
     print("4 = Filter by Price")
     print("5 = Delete Book")
     print("6 = Update Book")
-    print("7 = Exit")
+    print("7 = Sort by Price")
+    print("8 = Exit")
     try:
         choice=int(input(f"Enter Your Choice : "))
     except:
@@ -206,6 +233,8 @@ while True:
     elif choice==6:
         update_book()
     elif choice==7:
+        sort_books()
+    elif choice==8:
         print("\n====BYE====\n")
         break
     else:
