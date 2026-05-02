@@ -1,4 +1,16 @@
 from utils.helper import load_books,save_books
+
+def display_books(books):
+    if not books:
+        print("No Books Found")
+        return
+
+    for i, book in enumerate(books, 1):
+        print(f"{i}. {book['title'].title()} - ₹{book['price']}")
+        print(f"   Subject: {book['subject'].title()}")
+        print(f"   Description: {book['description'].capitalize()}\n")
+
+
 def add_book():
     books=load_books()
     
@@ -22,7 +34,7 @@ def add_book():
                 print("Price must be greater than or equal to 0")
                 continue
             break
-        except:
+        except ValueError:
             print("Invalid Price")
     
     description = input("Enter Description: ").strip().lower()
@@ -48,15 +60,14 @@ def view_books():
         return
 
     print("\n==== BOOK LIST ====\n")
-    for i, book in enumerate(books, 1):
-        print(f"{i}. {book['title'].title()} - ₹{book['price']}")
-        print(f"   Subject: {book['subject'].title()}")
-        print(f"   Description: {book['description'].capitalize()}\n")
-
+    display_books(books)
 
 def search_books():
     books=load_books()
     key=input("Enter keyword : ").lower()
+    if not key.strip():
+        print("Keyword cannot be empty")
+        return
     result=[]
 
     for b in books:
@@ -67,9 +78,7 @@ def search_books():
         print("No matching books")
     else:
         print(f"\nFound {len(result)} books:\n")
-        for i, b in enumerate(result,1):
-            print(f"{i}. {b['title'].title()} - ₹{b['price']} ({b['subject'].title()})")
-
+        display_books(result)
 def filter_by_price(min_price,max_price):
     books=load_books()
     result=[]
@@ -82,9 +91,8 @@ def filter_by_price(min_price,max_price):
         print("No books found in this price range")
     else:
         print(f"\nFound {len(result)} books: \n")
-        for i,b in enumerate(result,1):
-            print(f"{i}. {b['title'].title()} - ₹{b['price']}")       
-    
+        display_books(result)
+
 def delete_book():
     books=load_books()
 
@@ -103,13 +111,14 @@ def delete_book():
                 break
             else:
                 print(f"Invalid input. Your choice must be between 1 and {len(books)}.Please try again.")
-        except:
+        except ValueError:
             print("Enter Valid Choice")
     
     books.pop(choice-1)
     save_books(books)
 
     print("Book deleted successfully")
+    input("Press Enter to continue...")
 
 def update_book():
     books=load_books()
@@ -129,7 +138,7 @@ def update_book():
                 print("Try again")
                 continue
             break
-        except:
+        except ValueError:
             print("Enter a valid number")
             print("Try again")
 
@@ -149,7 +158,7 @@ def update_book():
                 if new_value<0:
                     print("Invalid price, must be a positive number")
                     continue
-            except:
+            except ValueError:
                 print("Invalid price, must be a positive number")
                 continue
 
@@ -177,7 +186,7 @@ def sort_books():
                 print("Try again")
                 continue
             break            
-        except:
+        except ValueError:
             print("Invalid choice")
             print("Try again")
     
@@ -187,10 +196,7 @@ def sort_books():
         sorted_books=sorted(books,key= lambda x:x["price"], reverse=True)
     
     print("\n====SORTED BOOK LIST ====\n")
-    for i , book in enumerate(sorted_books,1):
-        print(f"{i}. {book['title'].title()} - ₹{book['price']}")
-        print(f"   Subject: {book['subject'].title()}")
-        print(f"   Description: {book['description'].capitalize()}\n")
+    display_books(sorted_books)
 
 def show_stats():
     books=load_books()
@@ -222,25 +228,25 @@ def show_stats():
     print("\n==== STATS ====\n")
 
     print(f"Total Books: {total_books}")
-    print(f"Average Price: ₹{average_price}")
-    print(f"\nHighest Price Book:\n{max_price_book} - ₹{max_price}")  
-    print(f"\nLowest Price Book:\n{min_price_book} - ₹{min_price}")
+    print(f"Average Price: ₹{average_price:.2f}")
+    print(f"\nHighest Price Book:\n{max_price_book.title()} - ₹{max_price}")  
+    print(f"\nLowest Price Book:\n{min_price_book.title()} - ₹{min_price}")
     
 
 while True:            
     print("\n====MENU====\n")
-    print("1 = Add Book")
-    print("2 = View")
-    print("3 = Search")
-    print("4 = Filter by Price")
-    print("5 = Delete Book")
-    print("6 = Update Book")
-    print("7 = Sort by Price")
-    print("8 = Show Stats")
-    print("9 = Exit")
+    print("1. Add Book")
+    print("2. View")
+    print("3. Search")
+    print("4. Filter by Price")
+    print("5. Delete Book")
+    print("6. Update Book")
+    print("7. Sort by Price")
+    print("8. Show Stats")
+    print("9. Exit")
     try:
         choice=int(input(f"Enter Your Choice : "))
-    except:
+    except ValueError:
         print("Invalid input (Enter number)")
         continue
 
@@ -260,7 +266,7 @@ while True:
                     print("Minimum price cannot be greater than maximum price")
                     continue
                 break
-            except:
+            except ValueError:
                 print("Invalid input, enter numbers only")
         filter_by_price(min_price,max_price)
     elif choice==5:
